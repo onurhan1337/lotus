@@ -1,8 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { Home, Menu, Fan, Swords, Trophy } from "lucide-react";
+import { UserButton, useUser } from "@clerk/nextjs";
+import {
+  Home,
+  Menu,
+  Fan,
+  Swords,
+  Trophy,
+  Sword,
+  Users2,
+  MessageCircle,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -32,12 +41,35 @@ const HEADER_ITEMS = [
   },
 ];
 
+const HEADER_ADMIN_ITEMS = [
+  {
+    href: "/admin/challenges",
+    icon: <Sword className="h-5 w-5" />,
+    text: "Challenges",
+    current: false,
+  },
+  {
+    href: "/admin/users",
+    icon: <Users2 className="h-5 w-5" />,
+    text: "Users",
+    current: false,
+  },
+  {
+    href: "/admin/feedbacks",
+    icon: <MessageCircle className="h-5 w-5" />,
+    text: "Feedbacks",
+    current: false,
+  },
+];
+
 export default function BaseLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const { user } = useUser();
+  const admin = user?.publicMetadata.role === "admin";
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -65,6 +97,31 @@ export default function BaseLayout({
                   />
                 );
               })}
+
+              {admin && (
+                <div>
+                  <div className="flex items-center">
+                    <hr className="flex-grow border-t border-gray-300" />
+                    <span className="px-2 text-xs font-semibold text-muted-foreground uppercase">
+                      Admin
+                    </span>
+                    <hr className="flex-grow border-t border-gray-300" />
+                  </div>
+                  {HEADER_ADMIN_ITEMS.map((item) => {
+                    const current = pathname === item.href;
+
+                    return (
+                      <SideNavItem
+                        key={item.href}
+                        href={item.href}
+                        icon={item.icon}
+                        text={item.text}
+                        isCurrent={current}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </nav>
           </div>
           <div className="mt-auto p-4">
@@ -107,6 +164,31 @@ export default function BaseLayout({
                     />
                   );
                 })}
+
+                {admin && (
+                  <div>
+                    <div className="flex items-center">
+                      <hr className="flex-grow border-t border-gray-300" />
+                      <span className="px-2 text-xs font-semibold text-muted-foreground uppercase">
+                        Admin
+                      </span>
+                      <hr className="flex-grow border-t border-gray-300" />
+                    </div>
+                    {HEADER_ADMIN_ITEMS.map((item) => {
+                      const current = pathname === item.href;
+
+                      return (
+                        <MobileSideNavItem
+                          key={item.href}
+                          href={item.href}
+                          icon={item.icon}
+                          text={item.text}
+                          isCurrent={current}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </nav>
               <div className="mt-auto">
                 <MobileSupportCard />
@@ -114,6 +196,9 @@ export default function BaseLayout({
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1" />
+          <div className="md:hidden">
+            <ModeToggle />
+          </div>
           <UserButton />
         </header>
         {children}
