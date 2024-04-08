@@ -48,6 +48,7 @@ export default function BaseLayout({
               <Fan className="h-6 w-6" />
               <span className="">Lotus</span>
             </Link>
+            <ModeToggle />
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -113,7 +114,6 @@ export default function BaseLayout({
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1" />
-          <ModeToggle />
           <UserButton />
         </header>
         {children}
