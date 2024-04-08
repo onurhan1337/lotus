@@ -2,18 +2,30 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface SideNavItemProps {
   href: string;
   icon: ReactNode;
   text: string;
+  isCurrent: boolean;
 }
 
-export function SideNavItem({ href, icon, text }: SideNavItemProps) {
+export function SideNavItem({
+  href,
+  icon,
+  text,
+  isCurrent = false,
+}: SideNavItemProps) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+      className={cn(
+        isCurrent
+          ? "bg-muted text-primary hover:text-primary"
+          : "text-muted-foreground hover:text-foreground",
+        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+      )}
     >
       {icon}
       {text}
@@ -21,11 +33,21 @@ export function SideNavItem({ href, icon, text }: SideNavItemProps) {
   );
 }
 
-export function MobileSideNavItem({ href, icon, text }: SideNavItemProps) {
+export function MobileSideNavItem({
+  href,
+  icon,
+  text,
+  isCurrent = false,
+}: SideNavItemProps) {
   return (
     <Link
       href={href}
-      className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+      className={cn(
+        isCurrent
+          ? "bg-muted text-primary hover:text-primary"
+          : "text-muted-foreground hover:text-foreground",
+        "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
+      )}
     >
       {icon}
       {text}

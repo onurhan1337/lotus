@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Header from "@/components/layout/base-layout";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/app/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +22,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} overflow-y-scroll`}>
-          <main className="flex min-h-screen w-full flex-col bg-muted/40">
-            <Header>{children}</Header>
-          </main>
-          <Toaster />
+        <body className={`${inter.className} overflow-y-scroll antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="flex min-h-screen w-full flex-col bg-muted/40">
+              <Header>{children}</Header>
+            </main>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
