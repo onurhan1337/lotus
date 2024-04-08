@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <Container title="Dashboard">
-      <div className="flex flex-col items-center gap-1 text-center">
+      <section className="h-full flex flex-col flex-1 items-center justify-center">
         <h3 className="text-2xl font-bold tracking-tight">
           You have no challenges
         </h3>
@@ -22,7 +22,7 @@ export default function Home() {
         <Button className="mt-4">
           <Link href="/challenges">Join a challenge</Link>
         </Button>
-      </div>
+      </section>
     </Container>
   );
 }
