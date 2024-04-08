@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,9 @@ export default function Home() {
         <p className="text-sm text-muted-foreground">
           You can attempt challenges to challenge yourself.
         </p>
-        <Button className="mt-4">Start a challenge</Button>
+        <Button className="mt-4">
+          <Link href="/challenges">Join a challenge</Link>
+        </Button>
       </div>
     </Container>
   );
