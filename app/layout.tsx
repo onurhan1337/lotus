@@ -3,6 +3,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import Header from "@/components/layout/base-layout";
+import { Toaster } from "@/components/ui/toaster";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,7 +21,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={`${inter.className} overflow-y-scroll`}>
+          <main className="flex min-h-screen w-full flex-col bg-muted/40">
+            <Header>{children}</Header>
+          </main>
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );
