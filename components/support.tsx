@@ -26,7 +26,7 @@ export const SupportCard = () => {
         <Button
           onClick={() => router.push("https://www.buymeacoffee.com/onurhan")}
           size="sm"
-          className="w-full bg-blue-500 hover:bg-blue-600/90"
+          className="w-full bg-yellow-300/80 hover:bg-yellow-300 text-yellow-950 dark:text-yellow-600 leading-relaxed tracking-wider dark:bg-yellow-950 dark:hover:bg-yellow-950/90"
         >
           Support
         </Button>
