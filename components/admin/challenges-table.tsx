@@ -22,6 +22,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ListFilter, Search } from "lucide-react";
 import { Badge } from "../ui/badge";
+import AdminChallengeCreateDialog from "./challenge-create-dialog";
 
 interface AdminChallengesTableProps {
   name: string;
@@ -89,7 +90,7 @@ export default function AdminChallengesTable() {
               <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm">Create Challenge</Button>
+          <AdminChallengeCreateDialog />
         </div>
       </div>
       <Table className="my-4">
