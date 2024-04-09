@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Challenge {
+  id              String                @id @default(uuid())
+  name            String
+  description     String
+  maxParticipants Int
+  createdByUserId String                // This will store the Clerk user ID
+  rewards         Reward[]
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  participants    ChallengeParticipant[]
+  registrationDeadline DateTime?
+  startdate       DateTime 
+  endDate         DateTime
+  isActive        Boolean               @default(true) 
+}
+
+model Reward {
+  id          String       @id @default(uuid())
+  name        String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  challengeId String
+}
+
+model ChallengeParticipant {
+  id          String   @id @default(uuid())
+  challengeId String
+  userId      String   // This will store the Clerk user ID
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+}
