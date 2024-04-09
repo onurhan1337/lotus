@@ -123,7 +123,7 @@ export default function AdminChallengesTable() {
               </TableCell>
               <TableCell>
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm">
                       <MoreHorizontal />
                     </Button>
