@@ -18,9 +18,15 @@ model Challenge {
   updatedAt       DateTime              @updatedAt
   participants    ChallengeParticipant[]
   registrationDeadline DateTime?
-  startdate       DateTime 
+  startDate       DateTime 
   endDate         DateTime
-  isActive        Boolean               @default(true) 
+  isActive        ChallengeStatus       @default(ACTIVE)
+}
+
+enum ChallengeStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
 }
 
 model Reward {
