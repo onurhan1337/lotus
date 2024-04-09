@@ -1,11 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Controller } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -20,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface DatePickerProps {
   control: any;
@@ -40,7 +39,7 @@ export function DatePicker({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Popover>
@@ -81,7 +80,7 @@ export function DatePicker({
             </PopoverContent>
           </Popover>
           <FormDescription>{description}</FormDescription>
-          <FormMessage />
+          <FormMessage>{fieldState.error?.message}</FormMessage>
         </FormItem>
       )}
     />
