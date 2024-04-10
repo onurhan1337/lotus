@@ -23,7 +23,7 @@ export const createChallengeSchema = z
         required_error: "Date Range is required",
       }
     ),
-    isActive: z.enum(["ACTIVE", "INACTIVE"], {
+    isActive: z.enum(["ACTIVE", "INACTIVE", "COMPLETED"], {
       required_error: "Is Active is required",
     }),
     rewards: z.array(
