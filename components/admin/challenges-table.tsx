@@ -1,13 +1,11 @@
-"use client";
-
+import { getAllChallenges } from "@/actions/challenge";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Table,
@@ -17,50 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { formatDate } from "date-fns";
 import { ListFilter, Search } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import AdminChallengeCreateDialog from "./challenge-create-dialog";
+import AdminChallengesTableToolbar from "./challenges-table-toolbar";
 
-interface AdminChallengesTableProps {
-  name: string;
-  status: string;
-  participants: number;
-  duration: string;
-  onEdit: () => void;
-  onDelete: () => void;
-}
+export default async function AdminChallengesTable() {
+  const challenges = await getAllChallenges();
 
-const dummyData: AdminChallengesTableProps[] = [
-  {
-    name: "Laser Lemonade Machine",
-    status: "Draft",
-    participants: 25,
-    duration: "30 days",
-    onEdit: () => {},
-    onDelete: () => {},
-  },
-  {
-    name: "Hypernova Headphones",
-    status: "Active",
-    participants: 100,
-    duration: "10 days",
-    onEdit: () => {},
-    onDelete: () => {},
-  },
-  {
-    name: "AeroGlow Desk Lamp",
-    status: "Finished",
-    participants: 50,
-    duration: "1 month",
-    onEdit: () => {},
-    onDelete: () => {},
-  },
-];
-
-export default function AdminChallengesTable() {
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
@@ -92,7 +57,7 @@ export default function AdminChallengesTable() {
           </DropdownMenu>
           <AdminChallengeCreateDialog />
         </div>
-      </div>
+      </div>{" "}
       <Table className="my-4">
         <TableHeader>
           <TableRow>
@@ -106,7 +71,7 @@ export default function AdminChallengesTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dummyData.map((challenge) => (
+          {challenges.map((challenge) => (
             <TableRow key={challenge.name}>
               <TableCell>
                 <div className="flex items-center gap-2">
@@ -114,31 +79,18 @@ export default function AdminChallengesTable() {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant={"outline"}>{challenge.status}</Badge>
+                <Badge variant={"outline"}>{challenge.isActive}</Badge>
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {challenge.participants}
+                {challenge.maxParticipants}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {challenge.duration}
+                {formatDate(new Date(challenge.startDate), "MMM dd, yyyy") +
+                  " - " +
+                  formatDate(new Date(challenge.endDate), "MMM dd, yyyy")}
               </TableCell>
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm">
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={challenge.onEdit}>
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={challenge.onDelete}>
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <AdminChallengesTableToolbar id={challenge.id} />
               </TableCell>
             </TableRow>
           ))}
