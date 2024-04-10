@@ -124,3 +124,91 @@ export async function getChallenge(id: string) {
     throw new Error(error as string);
   }
 }
+
+/**
+ * Edit an existing challenge
+ * @param id - The ID of the challenge to edit
+ * @param data - New challenge data
+ * @returns Updated challenge
+ * @throws Error
+ */
+
+export async function editChallenge(id: string, data: Challenge) {
+  try {
+    const validatedData = createChallengeSchema.parse(data);
+
+    const currentChallenge = await prisma.challenge.findUnique({
+      where: { id },
+      include: { rewards: true },
+    });
+
+    if (!currentChallenge) {
+      throw new Error(`No challenge found with the id ${id}`);
+    }
+
+    const newRewards = validatedData.rewards.filter(
+      (reward) => !currentChallenge.rewards.some((r) => r.name === reward.name)
+    );
+    const existingRewards = validatedData.rewards.filter((reward) =>
+      currentChallenge.rewards.some((r) => r.name === reward.name)
+    );
+
+    const removedRewards = currentChallenge.rewards.filter(
+      (reward) => !validatedData.rewards.some((r) => r.name === reward.name)
+    );
+
+    const updatedChallenge = await prisma.challenge.update({
+      where: { id },
+      data: {
+        name: validatedData.name,
+        description: validatedData.description,
+        maxParticipants: validatedData.maxParticipants,
+        registrationDeadline: validatedData.registrationDeadline,
+        startDate: validatedData.dateRange.from,
+        endDate: validatedData.dateRange.to,
+        isActive: validatedData.isActive,
+        rewards: undefined,
+      },
+      include: {
+        rewards: true,
+      },
+    });
+
+    for (const reward of existingRewards) {
+      const existingReward = currentChallenge.rewards.find(
+        (r) => r.name === reward.name
+      );
+      if (existingReward) {
+        await prisma.reward.update({
+          where: { id: existingReward.id },
+          data: reward,
+        });
+      }
+    }
+
+    for (const reward of newRewards) {
+      await prisma.reward.create({
+        data: {
+          ...reward,
+          challengeId: updatedChallenge.id,
+        },
+      });
+    }
+
+    for (const reward of removedRewards) {
+      await prisma.reward.delete({
+        where: { id: reward.id },
+      });
+    }
+
+    const challenge = await prisma.challenge.findUnique({
+      where: { id },
+      include: { rewards: true },
+    });
+
+    revalidatePath("/admin/challenges");
+    return challenge;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
