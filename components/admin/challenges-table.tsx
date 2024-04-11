@@ -82,7 +82,7 @@ export default async function AdminChallengesTable() {
                 <Badge variant={"outline"}>{challenge.isActive}</Badge>
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {challenge.maxParticipants}
+                {challenge.participants.length}
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 {formatDate(new Date(challenge.startDate), "MMM dd, yyyy") +
