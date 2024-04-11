@@ -143,7 +143,6 @@ export async function getChallenge(id: string) {
  * @returns Updated challenge
  * @throws Error
  */
-
 export async function editChallenge(id: string, data: Challenge) {
   try {
     const validatedData = createChallengeSchema.parse(data);
@@ -168,18 +167,24 @@ export async function editChallenge(id: string, data: Challenge) {
       (reward) => !validatedData.rewards.some((r) => r.name === reward.name)
     );
 
+    const challengeData: Prisma.ChallengeUpdateInput = {
+      name: validatedData.name,
+      description: validatedData.description,
+      registrationDeadline: validatedData.registrationDeadline,
+      startDate: validatedData.dateRange.from,
+      endDate: validatedData.dateRange.to,
+      isActive: validatedData.isActive,
+      maxParticipants: validatedData.maxParticipants,
+      rewards: undefined,
+    };
+
+    if (validatedData.maxParticipants && validatedData.maxParticipants > 0) {
+      challengeData.maxParticipants = validatedData.maxParticipants;
+    }
+
     const updatedChallenge = await prisma.challenge.update({
       where: { id },
-      data: {
-        name: validatedData.name,
-        description: validatedData.description,
-        maxParticipants: validatedData.maxParticipants,
-        registrationDeadline: validatedData.registrationDeadline,
-        startDate: validatedData.dateRange.from,
-        endDate: validatedData.dateRange.to,
-        isActive: validatedData.isActive,
-        rewards: undefined,
-      },
+      data: challengeData,
       include: {
         rewards: true,
       },
