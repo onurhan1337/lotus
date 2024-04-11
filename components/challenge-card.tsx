@@ -23,7 +23,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="h-20">
         <CardTitle>
           <div className={"flex items-center justify-between"}>
             {challenge.name}
@@ -51,7 +51,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
       <CardContent className="h-20 tracking-tight leading-none">
         <p className="text-sm text-muted-foreground">{challenge.description}</p>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="h-20">
         <div className="w-full flex justify-between items-center">
           <div>
             {challenge.maxParticipants ? (
