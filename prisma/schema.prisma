@@ -4,23 +4,23 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Challenge {
-  id              String                @id @default(uuid())
-  name            String
-  description     String
-  maxParticipants Int
-  createdByUserId String                // This will store the Clerk user ID
-  rewards         Reward[]
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-  participants    ChallengeParticipant[]
+  id                   String                 @id @default(uuid())
+  name                 String
+  description          String
+  maxParticipants      Int?
+  createdByUserId      String // This will store the Clerk user ID
+  rewards              Reward[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  participants         ChallengeParticipant[]
   registrationDeadline DateTime?
-  startDate       DateTime 
-  endDate         DateTime
-  isActive        ChallengeStatus       @default(ACTIVE)
+  startDate            DateTime
+  endDate              DateTime
+  isActive             ChallengeStatus        @default(ACTIVE)
 }
 
 enum ChallengeStatus {
@@ -30,15 +30,15 @@ enum ChallengeStatus {
 }
 
 model Reward {
-  id          String       @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   challengeId String
 }
 
 model ChallengeParticipant {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   challengeId String
-  userId      String   // This will store the Clerk user ID
+  userId      String // This will store the Clerk user ID
   challenge   Challenge @relation(fields: [challengeId], references: [id])
 }

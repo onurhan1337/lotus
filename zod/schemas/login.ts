@@ -9,10 +9,7 @@ export const createChallengeSchema = z
       required_error: "Description is required",
     }),
     maxParticipants: z.coerce
-      .number({
-        required_error: "Max participants is required",
-      })
-      .min(1, "Max participants must be at least 1"),
+      .number().optional(),
     registrationDeadline: z.date(),
     dateRange: z.object(
       {
