@@ -48,7 +48,7 @@ export default function AdminChallengeCreateForm({
     defaultValues: {
       name: "",
       description: "",
-      maxParticipants: 0,
+      maxParticipants: undefined,
       registrationDeadline: undefined,
       dateRange: {
         from: undefined,
@@ -120,59 +120,6 @@ export default function AdminChallengeCreateForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="maxParticipants"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Max Participants</FormLabel>
-              <FormControl>
-                <Input type="number" min={1} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div>
-          <FormItem>
-            <DatePicker
-              control={form.control}
-              name="registrationDeadline"
-              label="Registration Deadline"
-              description="The date registration closes"
-            />
-
-            <FormMessage />
-          </FormItem>
-        </div>
-        <div className="col-span-2">
-          <FormField
-            control={form.control}
-            name="isActive"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Challenge Status</FormLabel>
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Challenge Status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="INACTIVE">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
         <div className="col-span-2">
           <FormField
             control={form.control}
@@ -222,6 +169,59 @@ export default function AdminChallengeCreateForm({
                 <FormDescription>
                   Select the start and end date for the challenge
                 </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="maxParticipants"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max Participants</FormLabel>
+              <FormControl>
+                <Input type="number" min={1} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div>
+          <FormItem>
+            <DatePicker
+              control={form.control}
+              name="registrationDeadline"
+              label="Registration Deadline"
+              description="The date registration closes"
+            />
+
+            <FormMessage />
+          </FormItem>
+        </div>
+        <div className="col-span-2">
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Challenge Status</FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Challenge Status" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="INACTIVE">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
