@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createChallengeSchema } from "@/zod/schemas/login";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -17,20 +18,25 @@ export async function createChallenge(userId: string, data: Challenge) {
   try {
     const validatedData = createChallengeSchema.parse(data);
 
-    const challenge = await prisma.challenge.create({
-      data: {
-        name: validatedData.name,
-        description: validatedData.description,
-        maxParticipants: validatedData.maxParticipants,
-        registrationDeadline: validatedData.registrationDeadline,
-        startDate: validatedData.dateRange.from,
-        endDate: validatedData.dateRange.to,
-        createdByUserId: userId,
-        isActive: validatedData.isActive,
-        rewards: {
-          create: validatedData.rewards,
-        },
+    const challengeData: Prisma.ChallengeCreateInput = {
+      name: validatedData.name,
+      description: validatedData.description,
+      registrationDeadline: validatedData.registrationDeadline,
+      startDate: validatedData.dateRange.from,
+      endDate: validatedData.dateRange.to,
+      createdByUserId: userId,
+      isActive: validatedData.isActive,
+      rewards: {
+        create: validatedData.rewards,
       },
+    };
+
+    if (validatedData.maxParticipants && validatedData.maxParticipants > 0) {
+      challengeData.maxParticipants = validatedData.maxParticipants;
+    }
+
+    const challenge = await prisma.challenge.create({
+      data: challengeData,
     });
 
     revalidatePath("/admin/challenges");
@@ -50,10 +56,16 @@ export async function getAllChallenges() {
     const challenges = await prisma.challenge.findMany({
       include: {
         rewards: true,
+        participants: true,
       },
     });
 
-    return challenges;
+    const challengesWithParticipantCount = challenges.map((challenge) => ({
+      ...challenge,
+      participantCount: challenge.participants.length,
+    }));
+
+    return challengesWithParticipantCount;
   } catch (error) {
     throw new Error(error as string);
   }
@@ -87,14 +99,13 @@ export async function removeChallenge(challengeId: string) {
       });
     }
 
-    const challenge = await prisma.challenge.delete({
+    await prisma.challenge.delete({
       where: {
         id: challengeId,
       },
     });
 
     revalidatePath("/admin/challenges");
-    return challenge;
   } catch (error) {
     throw new Error(error as string);
   }
