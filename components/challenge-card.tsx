@@ -1,6 +1,3 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Challenge } from "@prisma/client";
 import { formatDate } from "date-fns";
-import { useRouter } from "next/navigation";
+import { ChallengeDetailDialog } from "./challenge-detail-dialog";
 
 interface ChallengeCardProps {
   challenge: Challenge & {
@@ -19,8 +16,6 @@ interface ChallengeCardProps {
 }
 
 export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
-  const router = useRouter();
-
   return (
     <Card>
       <CardHeader className="h-20">
@@ -75,12 +70,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
             )}
           </div>
 
-          <Button
-            onClick={() => router.push(`/challenges/${challenge.id}`)}
-            size={"sm"}
-          >
-            View
-          </Button>
+          <ChallengeDetailDialog id={challenge.id} />
         </div>
       </CardFooter>
     </Card>
