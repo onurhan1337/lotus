@@ -123,6 +123,7 @@ export async function getChallenge(id: string) {
       where: { id },
       include: {
         rewards: true,
+        participants: true,
       },
     });
 
