@@ -229,3 +229,74 @@ export async function editChallenge(id: string, data: Challenge) {
     throw new Error(error as string);
   }
 }
+
+/**
+ * Joins a challenge.
+ * @param {string} challengeId - The ID of the challenge to join.
+ * @param {string} participantId - The ID of the participant joining the challenge.
+ * @returns {Promise<void>} A promise that resolves when the challenge is joined.
+ * @throws {Error} If there is an error while joining the challenge.
+ */
+export const joinChallenge = async (
+  challengeId: string,
+  participantId: string
+) => {
+  try {
+    const challenge = await prisma.challenge.findUnique({
+      where: { id: challengeId },
+      include: { participants: true },
+    });
+
+    if (!challenge) {
+      throw new Error(`No challenge found with the id ${challengeId}`);
+    }
+    const participant = await prisma.challengeParticipant.findFirst({
+      where: {
+        challengeId: challengeId,
+        userId: participantId,
+      },
+    });
+
+    if (participant) {
+      throw new Error(`You are already a participant in the challenge.`);
+    }
+
+    if (
+      challenge.maxParticipants &&
+      challenge.participants.length === challenge.maxParticipants
+    ) {
+      throw new Error(`Max participants reached for challenge.`);
+    }
+
+    if (
+      challenge.registrationDeadline &&
+      new Date(challenge.registrationDeadline) < new Date()
+    ) {
+      throw new Error(`Registration deadline has passed for challenge.`);
+    }
+
+    if (
+      challenge.isActive === "INACTIVE" ||
+      challenge.isActive === "COMPLETED"
+    ) {
+      throw new Error(
+        `Challenge is not active. Please contact the challenge owner to join the challenge.`
+      );
+    }
+
+    await prisma.challengeParticipant.create({
+      data: {
+        userId: participantId,
+        challenge: {
+          connect: {
+            id: challengeId,
+          },
+        },
+      },
+    });
+
+    revalidatePath("/admin/challenges");
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
