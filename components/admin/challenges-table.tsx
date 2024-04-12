@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ChallengeParticipant, ChallengeStatus } from "@prisma/client";
 import { formatDate } from "date-fns";
 import { ListFilter, Search } from "lucide-react";
 import { Badge } from "../ui/badge";
@@ -23,8 +24,23 @@ import { Input } from "../ui/input";
 import AdminChallengeCreateDialog from "./challenge-create-dialog";
 import AdminChallengesTableToolbar from "./challenges-table-toolbar";
 
+type Challenges = {
+  id: string;
+  name: string;
+  description: string;
+  maxParticipants: number | null;
+  createdByUserId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  registrationDeadline: Date | null;
+  startDate: Date;
+  endDate: Date;
+  isActive: ChallengeStatus;
+  participants?: ChallengeParticipant[];
+}[];
+
 export default async function AdminChallengesTable() {
-  const challenges = await getAllChallenges();
+  const challenges: Challenges = await getAllChallenges();
 
   return (
     <div>
@@ -82,7 +98,7 @@ export default async function AdminChallengesTable() {
                 <Badge variant={"outline"}>{challenge.isActive}</Badge>
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {challenge.participants.length}
+                {challenge.participants?.length}
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 {formatDate(new Date(challenge.startDate), "MMM dd, yyyy") +
