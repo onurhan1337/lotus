@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Suspense } from "react";
 import useSWR from "swr";
 import AdminChallengeEditForm from "./challenge-edit-form";
 
@@ -22,13 +23,9 @@ export default function AdminChallengeEditDialog({
   onClose,
   challengeId,
 }: AdminChallengeEditDialogProps) {
-  const { data: challenge, error } = useSWR(
-    challengeId ? challengeId : null,
-    () => getChallenge(challengeId)
+  const { data: challenge } = useSWR(challengeId ? challengeId : null, () =>
+    getChallenge(challengeId)
   );
-
-  if (error) return <div>Failed to load challenge</div>;
-  if (!challenge) return <div>Loading...</div>;
 
   return (
     <Dialog
@@ -44,7 +41,9 @@ export default function AdminChallengeEditDialog({
           </DialogDescription>
         </DialogHeader>
         {challenge && (
-          <AdminChallengeEditForm challenge={challenge} onClose={onClose} />
+          <Suspense>
+            <AdminChallengeEditForm challenge={challenge} onClose={onClose} />
+          </Suspense>
         )}
       </DialogContent>
     </Dialog>
