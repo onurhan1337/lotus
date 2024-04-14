@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Challenge } from "@prisma/client";
+import { Challenge, ChallengeParticipant, Reward } from "@prisma/client";
 import { formatDate } from "date-fns";
 import dynamic from "next/dynamic";
 
@@ -13,11 +13,19 @@ const ChallengeDetailDialog = dynamic(() =>
   import("@/components/challenge-detail-dialog").then(
     (mod) => mod.ChallengeDetailDialog
   )
-) as React.FC<{ id: string }>;
+) as React.FC<{
+  challenge: Challenge & {
+    participantCount: number;
+    rewards: Reward[];
+    participants: ChallengeParticipant[];
+  };
+}>;
 
 interface ChallengeCardProps {
   challenge: Challenge & {
     participantCount: number;
+    rewards: Reward[];
+    participants: ChallengeParticipant[];
   };
 }
 
@@ -76,7 +84,7 @@ export const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
             )}
           </div>
 
-          <ChallengeDetailDialog id={challenge.id} />
+          <ChallengeDetailDialog challenge={challenge} />
         </div>
       </CardFooter>
     </Card>

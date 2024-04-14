@@ -1,8 +1,11 @@
-"use server";
+"use client";
 
-import { getChallenge, joinChallenge } from "@/actions/challenge";
-import { auth } from "@clerk/nextjs";
+import { joinChallenge } from "@/actions/challenge";
+import { useUser } from "@clerk/nextjs";
+import { Challenge, ChallengeParticipant, Reward } from "@prisma/client";
 import { formatDate } from "date-fns";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChallengeJoinButton } from "./challenge-join-button";
 import {
   Accordion,
@@ -19,9 +22,27 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-export const ChallengeDetailDialog = async ({ id }: { id: string }) => {
-  const challenge = await getChallenge(id);
-  const { userId } = auth();
+interface ChallengeDetailDialogProps {
+  challenge: Challenge & {
+    participantCount: number;
+    rewards: Reward[];
+    participants: ChallengeParticipant[];
+  };
+}
+
+export const ChallengeDetailDialog = ({
+  challenge,
+}: ChallengeDetailDialogProps) => {
+  const { user } = useUser();
+  const router = useRouter();
+
+  if (!user) {
+    return null;
+  }
+
+  const isJoined = challenge.participants.some(
+    (participant) => participant.userId === user.id
+  );
 
   return (
     <Dialog>
@@ -81,11 +102,27 @@ export const ChallengeDetailDialog = async ({ id }: { id: string }) => {
           )}
         </section>
 
-        <ChallengeJoinButton
-          challenge={challenge}
-          userId={userId}
-          onJoin={joinChallenge}
-        />
+        {isJoined ? (
+          <Button
+            onClick={() => router.push(`/challenges/${challenge.id}`)}
+            variant={"outline"}
+          >
+            Go to challenge
+          </Button>
+        ) : (
+          <div className="flex flex-row">
+            <ChallengeJoinButton
+              challenge={challenge}
+              userId={user.id}
+              onJoin={joinChallenge}
+            />
+            <Button>
+              <Link href={`/admin/challenges/${challenge.id}`}>
+                View challenge
+              </Link>
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
