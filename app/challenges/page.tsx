@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getAllChallenges } from "@/actions/challenge";
 import { ChallengesList } from "@/components/challenges-list";
 import Container from "@/components/layout/container";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cache } from "react";
 
 export const metadata: Metadata = {
@@ -19,7 +20,18 @@ export default async function ChallengesPage() {
 
   return (
     <Container title="Challenges">
-      <ChallengesList challenges={challenges} />
+      <Tabs defaultValue="all">
+        <TabsList>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="joined">Joined</TabsTrigger>
+        </TabsList>
+        <TabsContent value="all">
+          <ChallengesList challenges={challenges} />
+        </TabsContent>
+        <TabsContent value="joined">
+          <ChallengesList challenges={challenges} filter="joined" />
+        </TabsContent>
+      </Tabs>
     </Container>
   );
 }
