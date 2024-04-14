@@ -21,6 +21,7 @@ model Challenge {
   startDate            DateTime
   endDate              DateTime
   isActive             ChallengeStatus        @default(ACTIVE)
+  feeds                Feed[]
 }
 
 enum ChallengeStatus {
@@ -41,4 +42,29 @@ model ChallengeParticipant {
   challengeId String
   userId      String // This will store the Clerk user ID
   challenge   Challenge @relation(fields: [challengeId], references: [id])
+}
+
+model Feed {
+  id          String    @id @default(uuid())
+  userId      String // This will store the Clerk user ID
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  text        String
+  likes        Int       @default(0)
+  images      String[]  @default([])
+  replies    Reply[]   
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Reply {
+  id          String    @id @default(uuid())
+  userId      String
+  feedId      String
+  feed        Feed      @relation(fields: [feedId], references: [id])
+  text        String
+  likes        Int       @default(0)
+  images      String[]  @default([])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
