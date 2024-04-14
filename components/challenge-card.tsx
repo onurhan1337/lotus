@@ -7,7 +7,13 @@ import {
 } from "@/components/ui/card";
 import { Challenge } from "@prisma/client";
 import { formatDate } from "date-fns";
-import { ChallengeDetailDialog } from "./challenge-detail-dialog";
+import dynamic from "next/dynamic";
+
+const ChallengeDetailDialog = dynamic(() =>
+  import("@/components/challenge-detail-dialog").then(
+    (mod) => mod.ChallengeDetailDialog
+  )
+) as React.FC<{ id: string }>;
 
 interface ChallengeCardProps {
   challenge: Challenge & {
