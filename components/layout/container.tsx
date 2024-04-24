@@ -10,7 +10,7 @@ export default function Container({
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">{title}</h1>
       </div>
-      <div className="h-full rounded-lg border border-dashed shadow-sm p-4">
+      <div className="relative h-full rounded-lg border border-dashed shadow-sm p-4">
         {children}
       </div>
     </main>
