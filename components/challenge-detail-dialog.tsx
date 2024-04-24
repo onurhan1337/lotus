@@ -4,7 +4,6 @@ import { joinChallenge } from "@/actions/challenge";
 import { useUser } from "@clerk/nextjs";
 import { Challenge, ChallengeParticipant, Reward } from "@prisma/client";
 import { formatDate } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChallengeJoinButton } from "./challenge-join-button";
 import {
@@ -110,18 +109,11 @@ export const ChallengeDetailDialog = ({
             Go to challenge
           </Button>
         ) : (
-          <div className="flex flex-row">
-            <ChallengeJoinButton
-              challenge={challenge}
-              userId={user.id}
-              onJoin={joinChallenge}
-            />
-            <Button>
-              <Link href={`/admin/challenges/${challenge.id}`}>
-                View challenge
-              </Link>
-            </Button>
-          </div>
+          <ChallengeJoinButton
+            challenge={challenge}
+            userId={user.id}
+            onJoin={joinChallenge}
+          />
         )}
       </DialogContent>
     </Dialog>
