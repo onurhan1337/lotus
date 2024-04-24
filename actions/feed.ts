@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 /**
  * Create a new feed
@@ -14,20 +15,20 @@ interface CreateFeedParams {
     text: string;
   };
   userId: string;
-  id: string;
+  feedChallengeId: string;
 }
 
 export async function createFeed(
   data: CreateFeedParams["data"],
   userId: CreateFeedParams["userId"],
-  id: CreateFeedParams["id"]
+  feedChallengeId: CreateFeedParams["feedChallengeId"]
 ) {
   try {
     const feed = await prisma.feed.create({
       data: {
         text: data.text,
         userId,
-        challengeId: id,
+        challengeId: feedChallengeId,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -35,6 +36,7 @@ export async function createFeed(
 
     if (!feed) throw new Error("Failed to create feed");
 
+    revalidatePath(`/challenges/${feedChallengeId}`);
     return feed;
   } catch (error) {
     throw new Error(error as string);
@@ -56,11 +58,42 @@ export async function getAllFeeds(challengeId: string) {
       include: {
         replies: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     if (!feeds) throw new Error("No feeds found for the challenge");
 
     return feeds;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
+
+/**
+ * Delete a feed
+ * @param feedId - The ID of the feed to delete
+ * @throws Error
+ */
+export async function deleteFeed(feedId: string) {
+  try {
+    const feed = await prisma.feed.findUnique({
+      where: {
+        id: feedId,
+      },
+    });
+
+    if (!feed) throw new Error("Feed not found");
+
+    await prisma.feed.delete({
+      where: {
+        id: feedId,
+      },
+    });
+
+    revalidatePath(`/challenges/${feed.challengeId}`);
+    return feed;
   } catch (error) {
     throw new Error(error as string);
   }
