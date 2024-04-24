@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { ThemeProvider } from "@/app/theme-provider";
 import Header from "@/components/layout/base-layout";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/app/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +32,7 @@ export default function RootLayout({
             <main className="flex min-h-screen w-full flex-col bg-muted/40">
               <Header>{children}</Header>
             </main>
-            <Toaster />
+            <Toaster position="bottom-center" />
           </ThemeProvider>
         </body>
       </html>
