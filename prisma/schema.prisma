@@ -8,20 +8,21 @@ datasource db {
 }
 
 model Challenge {
-  id                   String                 @id @default(uuid())
+  id                   String                @id @default(uuid())
   name                 String
   description          String
   maxParticipants      Int?
-  createdByUserId      String // This will store the Clerk user ID
+  createdByUserId      String                // This will store the Clerk user ID
   rewards              Reward[]
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
   participants         ChallengeParticipant[]
   registrationDeadline DateTime?
   startDate            DateTime
   endDate              DateTime
-  isActive             ChallengeStatus        @default(ACTIVE)
+  isActive             ChallengeStatus       @default(ACTIVE)
   feeds                Feed[]
+  goals                Goal[]
 }
 
 enum ChallengeStatus {
@@ -33,8 +34,8 @@ enum ChallengeStatus {
 model Reward {
   id          String    @id @default(uuid())
   name        String
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
   challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
 }
 
 model ChallengeParticipant {
@@ -42,6 +43,8 @@ model ChallengeParticipant {
   challengeId String
   userId      String // This will store the Clerk user ID
   challenge   Challenge @relation(fields: [challengeId], references: [id])
+  createdAt   DateTime  @default(now())
+  goals       Goal[]
 }
 
 model Feed {
@@ -50,9 +53,9 @@ model Feed {
   challengeId String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   text        String
-  likes        Int       @default(0)
+  likes       Int       @default(0)
   images      String[]  @default([])
-  replies    Reply[]   
+  replies     Reply[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -63,8 +66,20 @@ model Reply {
   feedId      String
   feed        Feed      @relation(fields: [feedId], references: [id])
   text        String
-  likes        Int       @default(0)
+  likes       Int       @default(0)
   images      String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+model Goal {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  userId      String
+  participant ChallengeParticipant @relation(fields: [userId], references: [id])
 }
