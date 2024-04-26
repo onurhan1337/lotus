@@ -43,8 +43,7 @@ model ChallengeParticipant {
   challengeId String
   userId      String // This will store the Clerk user ID
   challenge   Challenge @relation(fields: [challengeId], references: [id])
-  createdAt   DateTime  @default(now())
-  goals       Goal[]
+  createdAt   DateTime  @default(now())  
 }
 
 model Feed {
@@ -81,5 +80,4 @@ model Goal {
   challengeId String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   userId      String
-  participant ChallengeParticipant @relation(fields: [userId], references: [id])
 }
