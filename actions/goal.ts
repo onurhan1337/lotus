@@ -45,3 +45,27 @@ export async function createGoal(
     throw new Error(error as string);
   }
 }
+
+/**
+ * Get all goals of a user
+ * @param userId - User id
+ * @returns Array of goals
+ */
+export async function getGoals(userId: string) {
+  try {
+    const goals = await prisma.goal.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!goals) throw new Error("Failed to get goals");
+
+    return { data: goals };
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
