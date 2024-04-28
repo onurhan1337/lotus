@@ -80,4 +80,5 @@ model Goal {
   challengeId String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   userId      String
+  isCompleted Boolean   @default(false)
 }
