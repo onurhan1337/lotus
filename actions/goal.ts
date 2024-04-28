@@ -69,3 +69,38 @@ export async function getGoals(userId: string) {
     throw new Error(error as string);
   }
 }
+
+/**
+ * Update a goal to be completed
+ * @param goalId - Goal id
+ * @param userId - User id
+ * @returns Updated goal
+ */
+export async function updateGoalStatus(goalId: string, userId: string) {
+  try {
+    const goal = await prisma.goal.findUnique({
+      where: {
+        id: goalId,
+      },
+    });
+
+    if (!goal) throw new Error("Failed to find goal");
+
+    const updatedGoal = await prisma.goal.update({
+      where: {
+        id: goalId,
+      },
+      data: {
+        isCompleted: !goal.isCompleted,
+        updatedAt: new Date(),
+      },
+    });
+
+    if (!updatedGoal) throw new Error("Failed to update goal");
+
+    revalidatePath(`/challenges/${updatedGoal.challengeId}`);
+    return goal;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
