@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getChallenge } from "@/actions/challenge";
 import { getParticipantsPercentage } from "@/actions/stats";
 import { AddGoalDialog } from "@/components/add-goal-dialog";
+import { ChallengeTotalGoalsChart } from "@/components/challenge-total-goals-chart";
 import { FeedsSheet } from "@/components/feed-sheet";
 import Container from "@/components/layout/container";
 import { MyGoals } from "@/components/my-goals";
@@ -57,34 +58,26 @@ export default async function ChallengeDetailPage({
               "grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4"
             }
           >
-            <div className="col-span-1 sm:col-span-2 w-200 h-200">
-              {/* add other items here */}
+            <div className="col-span-1 sm:col-span-2 w-200 h-full">
+              <ChallengeTotalGoalsChart challengeId={id} />
             </div>
             <div className="sm:col-span-1 md:col-span-2 lg:col-span-1 gap-y-4 md:gap-x-4 md:gap-y-4 sm:gap-y-10 flex flex-col">
               <ParticipantsChart value={challenge.participants.length} />
               {challenge.maxParticipants && challenge.maxParticipants > 0 && (
                 <MaxParticipantsChart
+                  value={challenge.participants.length}
                   maxParticipants={challenge.maxParticipants}
-                  value={participantsPercentage}
                 />
               )}
             </div>
             <div className="sm:col-span-2 md:col-span-2 lg:col-span-1 h-full">
-              <MyGoals userId={userId} />
+              <MyGoals userId={userId} challengeId={id} />
             </div>
           </div>
         </TabsContent>
         <TabsContent value="participants">
           <div className={"flex flex-col space-y-4"}>
-            <div className={"flex items-center space-x-2"}>
-              <div className={"w-10 h-10 rounded-full bg-green-500"} />
-              <div className={"flex flex-col"}>
-                <div className={"text-sm font-medium"}>Participant</div>
-                <div className={"text-xs text-muted-foreground"}>
-                  Participant description
-                </div>
-              </div>
-            </div>
+            <p>Coming soon...</p>
           </div>
         </TabsContent>
       </Tabs>
