@@ -96,8 +96,14 @@ export async function getAllGoals(challengeId: string) {
       {}
     );
 
-    return Object.values(groupedGoals);
+    // Convert the object to an array and sort it by date
+    const sortedGoals = Object.values(groupedGoals).sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
+
+    return sortedGoals;
   } catch (error) {
     console.error("Error fetching goals:", error);
+    return [];
   }
 }
