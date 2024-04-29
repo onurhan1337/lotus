@@ -52,5 +52,6 @@ export async function getStats(challengeId: string) {
 export async function getParticipantsPercentage(challengeId: string) {
   const stats = await getStats(challengeId);
 
-  return (stats.totalParticipants / stats.maxParticipants) * 100;
+  const percentage = (stats.totalParticipants / stats.maxParticipants) * 100;
+  return Number(percentage.toFixed(2));
 }
