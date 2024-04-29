@@ -11,8 +11,14 @@ import {
 } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 
-export const MyGoals = async ({ userId }: { userId: string }) => {
-  const { data: goals } = await getGoals(userId);
+export const MyGoals = async ({
+  userId,
+  challengeId,
+}: {
+  userId: string;
+  challengeId: string;
+}) => {
+  const { data: goals } = await getGoals(userId, challengeId);
 
   return (
     <Card className="h-full">

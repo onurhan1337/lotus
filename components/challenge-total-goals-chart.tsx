@@ -1,4 +1,4 @@
-import { getAllGoals } from "@/actions/stats";
+import { GoalGroup, getAllGoals } from "@/actions/stats";
 import { AreaChart } from "@tremor/react";
 import {
   Card,
@@ -13,7 +13,7 @@ export const ChallengeTotalGoalsChart = async ({
 }: {
   challengeId: string;
 }) => {
-  const goals = await getAllGoals(challengeId);
+  const goals: GoalGroup[] = (await getAllGoals(challengeId)) ?? [];
 
   return (
     <Card className="h-full">
@@ -30,7 +30,7 @@ export const ChallengeTotalGoalsChart = async ({
           className="h-80"
           data={goals}
           index="date"
-          categories={["completedGoals", "totalGoals"]}
+          categories={["Completed Goals", "Total Goals"]}
           colors={["indigo", "rose"]}
           yAxisWidth={60}
         />
