@@ -87,6 +87,10 @@ export async function removeChallenge(challengeId: string) {
       where: { challengeId },
     });
 
+    const goals = await prisma.goal.findMany({
+      where: { challengeId },
+    });
+
     for (const reward of rewards) {
       await prisma.reward.delete({
         where: { id: reward.id },
@@ -96,6 +100,12 @@ export async function removeChallenge(challengeId: string) {
     for (const participant of participants) {
       await prisma.challengeParticipant.delete({
         where: { id: participant.id },
+      });
+    }
+
+    for (const goal of goals) {
+      await prisma.goal.delete({
+        where: { id: goal.id },
       });
     }
 
