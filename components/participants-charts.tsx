@@ -16,7 +16,7 @@ export const MaxParticipantsChart = ({
   maxParticipants: number;
 }) => {
   return (
-    <Card className="min-h-[175px] max-h-[175px]">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Max Participants</CardTitle>
         <CardDescription>
@@ -36,7 +36,7 @@ export const MaxParticipantsChart = ({
 
 export const ParticipantsChart = ({ value }: { value: number }) => {
   return (
-    <Card className="min-h-[175px] max-h-[175px]">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Total Participants</CardTitle>
         <CardDescription>

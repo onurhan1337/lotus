@@ -15,13 +15,13 @@ export const MyGoals = async ({ userId }: { userId: string }) => {
   const { data: goals } = await getGoals(userId);
 
   return (
-    <Card className="min-h-[365px] max-h-[365px]">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>My Goals</CardTitle>
         <CardDescription>Follow the progress of your goals</CardDescription>
       </CardHeader>
-      <CardContent className="min-h-[365px] max-h-[365px]">
-        <ScrollArea className="h-[230px]">
+      <CardContent className="h-[300px]">
+        <ScrollArea className="h-full">
           {goals && goals.length > 0 ? (
             goals.map((goal, index) => (
               <React.Fragment key={goal.id}>
