@@ -18,10 +18,10 @@ export const ChallengeTotalGoalsChart = async ({
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Max Participants</CardTitle>
+        <CardTitle>Total Goals</CardTitle>
         <CardDescription>
           <span className="text-xs tracking-tighter text-muted-foreground">
-            Maximum number of participants allowed in the challenge.
+            Total number of goals scored in the challenge.
           </span>
         </CardDescription>
       </CardHeader>
@@ -33,6 +33,7 @@ export const ChallengeTotalGoalsChart = async ({
           categories={["Completed Goals", "Total Goals"]}
           colors={["indigo", "rose"]}
           yAxisWidth={60}
+          showAnimation={true}
         />
       </CardContent>
     </Card>
