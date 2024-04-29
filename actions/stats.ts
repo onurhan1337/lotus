@@ -59,14 +59,10 @@ export async function getParticipantsPercentage(challengeId: string) {
   return Number(percentage.toFixed(2));
 }
 
-interface GoalGroup {
+export interface GoalGroup {
   date: string;
-  completedGoals: number;
-  totalGoals: number;
-}
-
-interface GoalsByDate {
-  [key: string]: GoalGroup;
+  "Completed Goals": number;
+  "Total Goals": number;
 }
 
 /**
@@ -78,30 +74,30 @@ export async function getAllGoals(challengeId: string) {
     const goals = await prisma.goal.findMany({
       where: {
         challengeId: challengeId,
-        isCompleted: true,
-      },
-      orderBy: {
-        createdAt: "asc",
       },
     });
 
-    const groupedGoals = goals.reduce((acc: GoalsByDate, goal) => {
-      const date = goal.createdAt.toISOString().split("T")[0];
-      if (!acc[date]) {
-        acc[date] = {
-          date: date,
-          completedGoals: 0,
-          totalGoals: 0,
-        };
-      }
-      acc[date].completedGoals++;
-      acc[date].totalGoals++;
-      return acc;
-    }, {});
+    const groupedGoals = goals.reduce<Record<string, GoalGroup>>(
+      (acc, goal) => {
+        const date = goal.createdAt.toISOString().split("T")[0];
+        if (!acc[date]) {
+          acc[date] = {
+            date: date,
+            "Completed Goals": 0,
+            "Total Goals": 0,
+          };
+        }
+        acc[date]["Total Goals"]++;
+        if (goal.isCompleted) {
+          acc[date]["Completed Goals"]++;
+        }
+        return acc;
+      },
+      {}
+    );
 
     return Object.values(groupedGoals);
   } catch (error) {
     console.error("Error fetching goals:", error);
-    throw error;
   }
 }
