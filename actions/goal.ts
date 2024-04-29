@@ -49,13 +49,15 @@ export async function createGoal(
 /**
  * Get all goals of a user
  * @param userId - User id
+ * @param challengeId - Challenge id
  * @returns Array of goals
  */
-export async function getGoals(userId: string) {
+export async function getGoals(userId: string, challengeId: string) {
   try {
     const goals = await prisma.goal.findMany({
       where: {
         userId,
+        challengeId,
       },
       orderBy: {
         createdAt: "desc",
