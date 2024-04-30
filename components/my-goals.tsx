@@ -44,17 +44,24 @@ export const MyGoals = async ({
               </React.Fragment>
             ))
           ) : (
-            <div
-              className={
-                "flex flex-col items-center space-y-2 border border-dashed border-muted-foreground p-4 rounded opacity-60"
-              }
-            >
-              <Inbox className="h-6 w-6 text-muted-foreground" />
-              <p className={"text-sm text-muted-foreground"}>No goals yet</p>
-            </div>
+            <EmptyMyGoals />
           )}
         </ScrollArea>
       </CardContent>
     </Card>
+  );
+};
+
+export const EmptyMyGoals = () => {
+  return (
+    <div className="flex flex-col items-center justify-center border border-muted-foreground border-dashed rounded-lg p-4 space-y-4 opacity-60">
+      <div className="flex flex-col items-center text-center">
+        <Inbox className="size-6 text-muted-foreground" />
+        <div className="text-sm font-medium">No goals found</div>
+        <div className="mt-2 text-xs text-muted-foreground">
+          You can add a goal by clicking the <b>Add Goal</b> button.
+        </div>
+      </div>
+    </div>
   );
 };
