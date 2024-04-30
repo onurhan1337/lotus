@@ -34,6 +34,7 @@ export const ChallengeTotalGoalsChart = async ({
           colors={["indigo", "rose"]}
           yAxisWidth={60}
           showAnimation={true}
+          noDataText="No goals created yet."
         />
       </CardContent>
     </Card>
