@@ -3,7 +3,7 @@
 import { joinChallenge } from "@/actions/challenge";
 import { useUser } from "@clerk/nextjs";
 import { Challenge, ChallengeParticipant, Reward } from "@prisma/client";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { ChallengeJoinButton } from "./challenge-join-button";
 import {
@@ -60,7 +60,7 @@ export const ChallengeDetailDialog = ({
               className="text-xs text-muted-foreground opacity-80"
               dateTime={challenge.startDate.toISOString()}
             >
-              {formatDate(new Date(challenge.startDate), "dd/MM/yyyy")}
+              {format(new Date(challenge.startDate), "dd/MM/yyyy")}
             </time>
             <span className="text-xs text-muted-foreground opacity-80">·</span>
             <time
@@ -68,7 +68,7 @@ export const ChallengeDetailDialog = ({
               dateTime={challenge.endDate?.toISOString()}
             >
               {challenge.endDate &&
-                formatDate(new Date(challenge.endDate), "dd/MM/yyyy")}
+                format(new Date(challenge.endDate), "dd/MM/yyyy")}
             </time>
           </div>
         </DialogHeader>
