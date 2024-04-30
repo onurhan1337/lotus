@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { endOfDay, format, startOfDay, subDays } from "date-fns";
 
 /**
  * @param challengeId
@@ -46,6 +47,30 @@ export async function getStats(challengeId: string) {
     console.error("Failed to get challenge stats:", error);
     throw error;
   }
+}
+
+export async function getDailyParticipants(challengeId: string) {
+  const data = [];
+  const currentDate = new Date();
+
+  for (let i = 0; i < 30; i++) {
+    const date = subDays(currentDate, i);
+    const formattedDate = format(date, "MMM dd"); // Tarih formatı 'Mar 01' gibi olacak
+
+    const count = await prisma.challengeParticipant.count({
+      where: {
+        challengeId: challengeId,
+        createdAt: {
+          gte: startOfDay(date),
+          lte: endOfDay(date),
+        },
+      },
+    });
+
+    data.push({ date: formattedDate, participants: count });
+  }
+
+  return data.reverse(); // Veriyi tarihe göre sırala, en eski gün en başta olacak şekilde
 }
 
 /**

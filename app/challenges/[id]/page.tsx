@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { getChallenge } from "@/actions/challenge";
-import { getParticipantsPercentage } from "@/actions/stats";
+import { getDailyParticipants } from "@/actions/stats";
 import { AddGoalDialog } from "@/components/add-goal-dialog";
 import { ChallengeTotalGoalsChart } from "@/components/challenge-total-goals-chart";
 import { FeedsSheet } from "@/components/feed-sheet";
@@ -34,7 +34,7 @@ export default async function ChallengeDetailPage({
   const { userId } = auth();
   const { id } = params;
   const challenge = await loadChallenge(id);
-  const participantsPercentage = await getParticipantsPercentage(id);
+  const participantsPercentage = await getDailyParticipants(id);
 
   if (!userId || !challenge) return null;
 
@@ -58,11 +58,14 @@ export default async function ChallengeDetailPage({
               "grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4"
             }
           >
-            <div className="col-span-1 sm:col-span-2 w-200 h-full">
+            <div className="col-span-1 sm:col-span-2 h-full">
               <ChallengeTotalGoalsChart challengeId={id} />
             </div>
             <div className="sm:col-span-1 md:col-span-2 lg:col-span-1 gap-y-4 md:gap-x-4 md:gap-y-4 sm:gap-y-10 flex flex-col">
-              <ParticipantsChart value={challenge.participants.length} />
+              <ParticipantsChart
+                value={challenge.participants.length}
+                participantsPercentage={participantsPercentage}
+              />
               {challenge.maxParticipants && challenge.maxParticipants > 0 && (
                 <MaxParticipantsChart
                   value={challenge.participants.length}

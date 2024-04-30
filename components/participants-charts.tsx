@@ -1,5 +1,6 @@
 "use client";
 
+import { SparkAreaChart } from "@tremor/react";
 import {
   Card,
   CardContent,
@@ -34,7 +35,16 @@ export const MaxParticipantsChart = ({
   );
 };
 
-export const ParticipantsChart = ({ value }: { value: number }) => {
+export const ParticipantsChart = ({
+  value,
+  participantsPercentage,
+}: {
+  value: number;
+  participantsPercentage: {
+    date: string;
+    participants: number;
+  }[];
+}) => {
   return (
     <Card className="h-full">
       <CardHeader>
@@ -46,7 +56,14 @@ export const ParticipantsChart = ({ value }: { value: number }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <h1 className="text-2xl font-bold">{value}</h1>
+        <h2 className="text-2xl">{value}</h2>
+        <SparkAreaChart
+          index={"date"}
+          className="w-full"
+          categories={["participants"]}
+          colors={["teal"]}
+          data={participantsPercentage}
+        />
       </CardContent>
     </Card>
   );
