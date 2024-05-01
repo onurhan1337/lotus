@@ -144,3 +144,24 @@ export async function deleteGoal(goalId: string) {
     throw new Error(error as string);
   }
 }
+
+/**
+ * Gel goal by id
+ * @param goalId - Goal id
+ * @returns Goal
+ */
+export async function getGoal(goalId: string) {
+  try {
+    const goal = await prisma.goal.findUnique({
+      where: {
+        id: goalId,
+      },
+    });
+
+    if (!goal) throw new Error("Failed to find goal");
+
+    return goal;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
