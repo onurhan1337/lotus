@@ -165,3 +165,50 @@ export async function getGoal(goalId: string) {
     throw new Error(error as string);
   }
 }
+
+interface EditGoalParams {
+  data: {
+    name: string;
+    description: string;
+  };
+  userId: string;
+  goalId: string;
+}
+
+/**
+ * Edit a goal
+ * @param goalId - Goal id
+ * @param data - Goal data
+ * @returns Updated goal
+ */
+export async function editGoal(goalId: string, data: EditGoalParams["data"]) {
+  try {
+    const validatedData = createGoalSchema.parse(data);
+
+    const goal = await prisma.goal.findUnique({
+      where: {
+        id: goalId,
+      },
+    });
+
+    if (!goal) throw new Error("Failed to find goal");
+
+    const updatedGoal = await prisma.goal.update({
+      where: {
+        id: goalId,
+      },
+      data: {
+        name: validatedData.name,
+        description: validatedData.description,
+        updatedAt: new Date(),
+      },
+    });
+
+    if (!updatedGoal) throw new Error("Failed to update goal");
+
+    revalidatePath(`/challenges/${updatedGoal.challengeId}`);
+    return goal;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
