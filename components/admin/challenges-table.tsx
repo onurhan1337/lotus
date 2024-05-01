@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChallengeParticipant, ChallengeStatus } from "@prisma/client";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
 import { ListFilter, Search } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -101,9 +101,9 @@ export default async function AdminChallengesTable() {
                 {challenge.participants?.length}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {formatDate(new Date(challenge.startDate), "MMM dd, yyyy") +
+                {format(new Date(challenge.startDate), "MMM dd, yyyy") +
                   " - " +
-                  formatDate(new Date(challenge.endDate), "MMM dd, yyyy")}
+                  format(new Date(challenge.endDate), "MMM dd, yyyy")}
               </TableCell>
               <TableCell>
                 <AdminChallengesTableToolbar id={challenge.id} />
