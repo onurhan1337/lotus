@@ -1,6 +1,6 @@
 "use client";
 
-import { SparkAreaChart } from "@tremor/react";
+import { ProgressBar, SparkAreaChart } from "@tremor/react";
 import {
   Card,
   CardContent,
@@ -26,10 +26,12 @@ export const MaxParticipantsChart = ({
           </span>
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col space-y-3">
         <h1 className="text-2xl">
           {value} / <b>{maxParticipants}</b>
         </h1>
+
+        <ProgressBar value={value} color="blue" className="py-2" />
       </CardContent>
     </Card>
   );
