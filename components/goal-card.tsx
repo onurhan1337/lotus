@@ -43,7 +43,7 @@ export const GoalCard = ({ goal }: GoalCardProps) => {
           <h2
             className={cn(
               goal.isCompleted ? "line-through" : "",
-              "text-sm leading-6 tracking-wide font-medium"
+              "text-sm leading-6 font-medium tracking-tight"
             )}
           >
             {goal.name}
@@ -51,7 +51,7 @@ export const GoalCard = ({ goal }: GoalCardProps) => {
           <p
             className={cn(
               goal.isCompleted ? "line-through" : "",
-              "text-sm leading-6 tracking-tighter text-balance text-muted-foreground"
+              "text-sm tracking-tighter text-balance text-muted-foreground"
             )}
           >
             {goal.description}

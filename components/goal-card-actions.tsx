@@ -39,7 +39,7 @@ export const GoalCardActions = ({ goalId }: { goalId: string }) => {
             <DotsHorizontalIcon className="h-3.5 w-3.5" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
             Edit
           </DropdownMenuItem>

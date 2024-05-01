@@ -27,7 +27,7 @@ export const MyGoals = async ({
         <CardDescription>Follow the progress of your goals</CardDescription>
       </CardHeader>
       <CardContent className="h-[300px]">
-        <ScrollArea className="h-full">
+        <ScrollArea className="h-full px-4">
           {goals && goals.length > 0 ? (
             goals.map((goal, index) => (
               <React.Fragment key={goal.id}>
