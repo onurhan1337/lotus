@@ -114,3 +114,33 @@ export async function updateGoalStatus(goalId: string, userId: string) {
     throw new Error(error as string);
   }
 }
+
+/**
+ * Delete a goal
+ * @param goalId - Goal id
+ * @returns Deleted goal
+ */
+export async function deleteGoal(goalId: string) {
+  try {
+    const goal = await prisma.goal.findUnique({
+      where: {
+        id: goalId,
+      },
+    });
+
+    if (!goal) throw new Error("Failed to find goal");
+
+    const deletedGoal = await prisma.goal.delete({
+      where: {
+        id: goalId,
+      },
+    });
+
+    if (!deletedGoal) throw new Error("Failed to delete goal");
+
+    revalidatePath(`/challenges/${goal.challengeId}`);
+    return goal;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
