@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AddDialog } from "./add-dialog";
+import { AddDialog } from "./add-goal-form";
 import { Button } from "./ui/button";
 import {
   Dialog,
