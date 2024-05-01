@@ -79,45 +79,16 @@ export async function getAllChallenges() {
  */
 export async function removeChallenge(challengeId: string) {
   try {
-    const rewards = await prisma.reward.findMany({
-      where: { challengeId },
+    await prisma.$transaction(async (prisma) => {
+      const deletions = [
+        prisma.reward.deleteMany({ where: { challengeId } }),
+        prisma.challengeParticipant.deleteMany({ where: { challengeId } }),
+        prisma.goal.deleteMany({ where: { challengeId } }),
+        prisma.feed.deleteMany({ where: { challengeId } }),
+      ];
+
+      await Promise.all(deletions);
     });
-
-    const participants = await prisma.challengeParticipant.findMany({
-      where: { challengeId },
-    });
-
-    const goals = await prisma.goal.findMany({
-      where: { challengeId },
-    });
-
-    const feeds = await prisma.feed.findMany({
-      where: { challengeId },
-    });
-
-    for (const reward of rewards) {
-      await prisma.reward.delete({
-        where: { id: reward.id },
-      });
-    }
-
-    for (const participant of participants) {
-      await prisma.challengeParticipant.delete({
-        where: { id: participant.id },
-      });
-    }
-
-    for (const goal of goals) {
-      await prisma.goal.delete({
-        where: { id: goal.id },
-      });
-    }
-
-    for (const feed of feeds) {
-      await prisma.feed.delete({
-        where: { id: feed.id },
-      });
-    }
 
     await prisma.challenge.delete({
       where: {

@@ -13,6 +13,7 @@ import {
 } from "@/components/participants-charts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@clerk/nextjs";
+import { notFound } from "next/navigation";
 import { cache } from "react";
 
 export const metadata: Metadata = {
@@ -36,7 +37,13 @@ export default async function ChallengeDetailPage({
   const challenge = await loadChallenge(id);
   const participantsPercentage = await getDailyParticipants(id);
 
-  if (!userId || !challenge) return null;
+  const isJoined = challenge?.participants.some(
+    (participant) => participant.userId === userId
+  );
+
+  if (!userId || !challenge || !isJoined) {
+    notFound();
+  }
 
   return (
     <Container title={challenge.name}>
