@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { createGoalSchema } from "@/zod/schemas/goal";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -25,16 +27,22 @@ export async function createGoal(
   challengeId: CreateGoalParams["challengeId"]
 ) {
   try {
-    const goal = await prisma.goal.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        userId,
-        challengeId,
+    const validatedData = createGoalSchema.parse(data);
 
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    const goalData: Prisma.GoalCreateInput = {
+      name: validatedData.name,
+      description: validatedData.description,
+      userId,
+      challenge: {
+        connect: {
+          id: challengeId,
+        },
       },
+      createdAt: new Date(),
+    };
+
+    const goal = await prisma.goal.create({
+      data: goalData,
     });
 
     if (!goal) throw new Error("Failed to create goal");

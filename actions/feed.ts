@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { createFeedSchema } from "@/zod/schemas/feed";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -24,14 +26,21 @@ export async function createFeed(
   feedChallengeId: CreateFeedParams["feedChallengeId"]
 ) {
   try {
-    const feed = await prisma.feed.create({
-      data: {
-        text: data.text,
-        userId,
-        challengeId: feedChallengeId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    const validatedData = createFeedSchema.parse(data);
+
+    const feedData: Prisma.FeedCreateInput = {
+      text: validatedData.text,
+      userId,
+      challenge: {
+        connect: {
+          id: feedChallengeId,
+        },
       },
+      createdAt: new Date(),
+    };
+
+    const feed = await prisma.feed.create({
+      data: feedData,
     });
 
     if (!feed) throw new Error("Failed to create feed");
