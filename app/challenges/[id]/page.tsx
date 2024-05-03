@@ -4,7 +4,7 @@ import { getChallenge } from "@/actions/challenge";
 import { getDailyParticipants } from "@/actions/stats";
 import { AddGoalDialog } from "@/components/add-goal-dialog";
 import { ChallengeTotalGoalsChart } from "@/components/challenge-total-goals-chart";
-import { FeedsSheet } from "@/components/feed-sheet";
+import { FeedsSheetProps } from "@/components/feed-sheet";
 import Container from "@/components/layout/container";
 import { MyGoals } from "@/components/my-goals";
 import {
@@ -13,8 +13,13 @@ import {
 } from "@/components/participants-charts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+
+const FeedsSheet = dynamic<FeedsSheetProps>(() =>
+  import("@/components/feed-sheet").then((m) => m.FeedsSheet)
+);
 
 export const metadata: Metadata = {
   title: "Challenge",

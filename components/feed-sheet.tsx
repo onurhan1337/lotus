@@ -13,16 +13,16 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
+export interface FeedsSheetProps {
+  feedChallengeId: string;
+}
+
 const loadFeeds = cache(async (feedChallengeId: string) => {
   const feeds = await getAllFeeds(feedChallengeId);
   return feeds;
 });
 
-export const FeedsSheet = async ({
-  feedChallengeId,
-}: {
-  feedChallengeId: string;
-}) => {
+export const FeedsSheet = async ({ feedChallengeId }: FeedsSheetProps) => {
   const feeds = await loadFeeds(feedChallengeId);
 
   return (
