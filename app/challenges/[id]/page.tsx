@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { getChallenge } from "@/actions/challenge";
 import { getDailyParticipants } from "@/actions/stats";
-import { AddGoalDialog } from "@/components/add-goal-dialog";
+import { AddGoalDialogProps } from "@/components/add-goal-dialog";
 import { ChallengeTotalGoalsChart } from "@/components/challenge-total-goals-chart";
 import { FeedsSheetProps } from "@/components/feed-sheet";
 import Container from "@/components/layout/container";
@@ -19,6 +19,11 @@ import { cache } from "react";
 
 const FeedsSheet = dynamic<FeedsSheetProps>(() =>
   import("@/components/feed-sheet").then((m) => m.FeedsSheet)
+);
+
+const AddGoalDialog = dynamic<AddGoalDialogProps>(
+  () => import("@/components/add-goal-dialog").then((m) => m.AddGoalDialog),
+  { ssr: false }
 );
 
 export const metadata: Metadata = {

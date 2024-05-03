@@ -12,7 +12,11 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-export const AddGoalDialog = ({ challengeId }: { challengeId: string }) => {
+export interface AddGoalDialogProps {
+  challengeId: string;
+}
+
+export const AddGoalDialog = ({ challengeId }: AddGoalDialogProps) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
