@@ -72,7 +72,7 @@ export default async function ChallengeDetailPage({
         <TabsContent value="overview">
           <div
             className={
-              "grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4"
+              "grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
             }
           >
             <div className="col-span-1 sm:col-span-2 h-full">
@@ -90,7 +90,7 @@ export default async function ChallengeDetailPage({
                 />
               )}
             </div>
-            <div className="sm:col-span-2 md:col-span-2 lg:col-span-1 h-full">
+            <div className="sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-1 h-full">
               <MyGoals userId={userId} challengeId={id} />
             </div>
           </div>
