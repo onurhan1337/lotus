@@ -1,5 +1,12 @@
 import prisma from "@/lib/prisma";
-import { endOfDay, format, startOfDay, subDays } from "date-fns";
+import {
+  endOfDay,
+  format,
+  formatISO,
+  parseISO,
+  startOfDay,
+  subDays,
+} from "date-fns";
 
 /**
  * @param challengeId
@@ -100,18 +107,21 @@ export async function getAllGoals(challengeId: string) {
       where: {
         challengeId: challengeId,
       },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
 
     const groupedGoals = goals.reduce<Record<string, GoalGroup>>(
       (acc, goal) => {
-        const date = goal.createdAt.toISOString().split("T")[0];
-        if (!acc[date]) {
-          acc[date] = {
-            date: date,
-            "Completed Goals": 0,
-            "Total Goals": 0,
-          };
-        }
+        const date = formatISO(parseISO(goal.createdAt.toISOString()), {
+          representation: "date",
+        });
+        acc[date] = acc[date] || {
+          date,
+          "Completed Goals": 0,
+          "Total Goals": 0,
+        };
         acc[date]["Total Goals"]++;
         if (goal.isCompleted) {
           acc[date]["Completed Goals"]++;
@@ -121,10 +131,7 @@ export async function getAllGoals(challengeId: string) {
       {}
     );
 
-    // Convert the object to an array and sort it by date
-    const sortedGoals = Object.values(groupedGoals).sort((a, b) =>
-      a.date.localeCompare(b.date)
-    );
+    const sortedGoals = Object.values(groupedGoals);
 
     return sortedGoals;
   } catch (error) {
