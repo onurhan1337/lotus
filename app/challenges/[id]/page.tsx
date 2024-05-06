@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getChallenge } from "@/actions/challenge";
+import { getGoals } from "@/actions/goal";
 import { getDailyParticipants } from "@/actions/stats";
 import { AddGoalDialogProps } from "@/components/add-goal-dialog";
 import { ChallengeTotalGoalsChart } from "@/components/challenge-total-goals-chart";
@@ -55,6 +56,8 @@ export default async function ChallengeDetailPage({
     notFound();
   }
 
+  const { data: goals } = await getGoals(userId, challenge.id);
+
   return (
     <Container title={challenge.name}>
       <Tabs defaultValue="overview" className="w-full">
@@ -91,7 +94,7 @@ export default async function ChallengeDetailPage({
               )}
             </div>
             <div className="sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-1 h-full">
-              <MyGoals userId={userId} challengeId={id} />
+              <MyGoals goals={goals} />
             </div>
           </div>
         </TabsContent>

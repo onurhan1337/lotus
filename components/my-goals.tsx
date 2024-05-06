@@ -1,7 +1,11 @@
-import { getGoals } from "@/actions/goal";
+"use client";
+
+import { Goal } from "@prisma/client";
 import { Inbox } from "lucide-react";
 import React from "react";
 import { GoalCard } from "./goal-card";
+import { ShareGoalsDialog } from "./share-goals-dialog";
+import { ShareableGoalCard } from "./shareable-goal-card";
 import {
   Card,
   CardContent,
@@ -11,20 +15,34 @@ import {
 } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 
-export const MyGoals = async ({
-  userId,
-  challengeId,
-}: {
-  userId: string;
-  challengeId: string;
-}) => {
-  const { data: goals } = await getGoals(userId, challengeId);
-
+export const MyGoals = ({ goals }: { goals: Goal[] }) => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>My Goals</CardTitle>
-        <CardDescription>Follow the progress of your goals</CardDescription>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start">
+            <CardTitle>My Goals</CardTitle>
+            <CardDescription>Follow the progress of your goals</CardDescription>
+          </div>
+          {goals && goals.length > 0 && (
+            <ShareGoalsDialog>
+              {goals.map((goal, index) => (
+                <div key={goal.id}>
+                  <ShareableGoalCard goal={goal} />
+                  {index !== goals.length - 1 && (
+                    <span
+                      className={
+                        "text-xs block text-muted-foreground text-center "
+                      }
+                    >
+                      ···
+                    </span>
+                  )}
+                </div>
+              ))}
+            </ShareGoalsDialog>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="h-[300px]">
         <ScrollArea className="h-full px-4">
