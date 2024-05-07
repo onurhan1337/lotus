@@ -7,7 +7,7 @@ interface SimpleGoalCardProps {
 export const ShareableGoalCard = ({ goal }: SimpleGoalCardProps) => {
   return (
     <div className="flex items-center justify-start py-2">
-      <span className="flex-shrink-0 h-6 w-6 rounded-full bg-neutral-200 dark:bg-[#070809]">
+      <span className="flex-shrink-0 h-6 w-6 rounded-full">
         {goal.isCompleted ? "▣" : "▢"}
       </span>
       <article className="flex flex-col">
