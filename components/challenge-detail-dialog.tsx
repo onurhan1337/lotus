@@ -103,7 +103,7 @@ export const ChallengeDetailDialog = ({
 
         {isJoined ? (
           <Button
-            onClick={() => router.push(`/challenges/${challenge.id}`)}
+            onClick={() => router.push(`/${challenge.id}`)}
             variant={"outline"}
           >
             Go to challenge
