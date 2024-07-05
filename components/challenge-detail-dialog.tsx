@@ -102,12 +102,18 @@ export const ChallengeDetailDialog = ({
         </section>
 
         {isJoined ? (
-          <Button
-            onClick={() => router.push(`/${challenge.id}`)}
-            variant={"outline"}
-          >
-            Go to challenge
-          </Button>
+          challenge.isActive === "COMPLETED" ? (
+            <Button variant={"outline"} disabled>
+              Challenge Completed 🎉
+            </Button>
+          ) : (
+            <Button
+              onClick={() => router.push(`/${challenge.id}`)}
+              variant={"outline"}
+            >
+              Go to challenge
+            </Button>
+          )
         ) : (
           <ChallengeJoinButton
             challenge={challenge}
