@@ -13,7 +13,13 @@ interface GoalCardProps {
 }
 
 export const GoalCard = ({ goal }: GoalCardProps) => {
-  const [isPending, startTransition] = React.useTransition();
+  const [optimisticGoal, setOptimisticGoal] = React.useOptimistic(
+    goal,
+    (goal) => ({
+      ...goal,
+      isCompleted: !goal.isCompleted,
+    })
+  );
 
   const handleCompleteGoal = async (goal: Goal): Promise<void> => {
     try {
@@ -33,11 +39,14 @@ export const GoalCard = ({ goal }: GoalCardProps) => {
     <div className="flex items-center justify-between py-2">
       <div className="flex-1 flex items-center justify-start space-x-4 -space-y-1">
         <Checkbox
-          checked={goal.isCompleted}
-          onCheckedChange={() =>
-            startTransition(() => handleCompleteGoal(goal))
-          }
-          disabled={isPending}
+          checked={optimisticGoal.isCompleted}
+          onCheckedChange={async () => {
+            setOptimisticGoal((goal: Goal) => ({
+              ...goal,
+              isCompleted: !goal.isCompleted,
+            }));
+            await handleCompleteGoal(goal);
+          }}
         />
         <article className={"flex flex-col"}>
           <h2
