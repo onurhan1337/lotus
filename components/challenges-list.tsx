@@ -22,6 +22,13 @@ export const ChallengesList = ({ challenges, filter }: ChallengesListProps) => {
       )
     );
   }
+
+  if (filter === "completed") {
+    filteredChallenges = challenges.filter(
+      (challenge) => challenge.isActive === "COMPLETED"
+    );
+  }
+
   3;
   return (
     <ul className={"w-full"}>
