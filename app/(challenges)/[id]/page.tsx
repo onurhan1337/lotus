@@ -56,6 +56,10 @@ export default async function ChallengeDetailPage({
     notFound();
   }
 
+  if (challenge.isActive === "INACTIVE" || challenge.isActive === "COMPLETED") {
+    notFound();
+  }
+
   const { data: goals } = await getGoals(userId, challenge.id);
 
   return (
