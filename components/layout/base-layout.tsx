@@ -13,7 +13,7 @@ import { MobileSideNavItem, SideNavItem } from "./side-nav-item";
 
 const HEADER_ITEMS = [
   {
-    href: "/challenges",
+    href: "/",
     icon: <Swords className="h-5 w-5" />,
     text: "Challenges",
     current: false,
