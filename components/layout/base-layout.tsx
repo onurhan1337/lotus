@@ -1,42 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
-import {
-  Home,
-  Menu,
-  Fan,
-  Swords,
-  Trophy,
-  Sword,
-  Users2,
-  MessageCircle,
-} from "lucide-react";
+import { Fan, Menu, MessageCircle, Sword, Swords, Users2 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { SideNavItem, MobileSideNavItem } from "./side-nav-item";
-import { SupportCard, MobileSupportCard } from "../support";
-import { ModeToggle } from "../theme-toggle";
 import { usePathname } from "next/navigation";
+import { MobileSupportCard, SupportCard } from "../support";
+import { ModeToggle } from "../theme-toggle";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { MobileSideNavItem, SideNavItem } from "./side-nav-item";
 
 const HEADER_ITEMS = [
-  {
-    href: "/",
-    icon: <Home className="h-5 w-5" />,
-    text: "Dashboard",
-    current: false,
-  },
   {
     href: "/challenges",
     icon: <Swords className="h-5 w-5" />,
     text: "Challenges",
-    current: false,
-  },
-  {
-    href: "/leaderboard",
-    icon: <Trophy className="h-5 w-5" />,
-    text: "Leaderboard",
     current: false,
   },
 ];
